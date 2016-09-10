@@ -1,0 +1,4 @@
+pytest
+redis
+hypothesis
+crc16
