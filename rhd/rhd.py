@@ -9,8 +9,8 @@ class Rhd(object):
         self.connections = connections
         self.num_conns = len(self.connections)
 
-    def set(self, c, bytes):
-        pass
+    def set(self, c, _bytes):
+        self.get_connection(c).set(c, _bytes)
 
     def setbit(self, c, i, bit):
         pass
@@ -22,7 +22,7 @@ class Rhd(object):
         pass
 
     def get(self, c):
-        pass
+        return self.get_connection(c).get(c)
 
     def getbit(self, c):
         pass

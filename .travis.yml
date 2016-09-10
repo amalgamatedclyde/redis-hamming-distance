@@ -6,6 +6,8 @@ language: python
 python:
   - "3.5"
   - "3.4"
+services:
+  - redis-server
 # Install any dependencies for running the tests:
 install: pip install -r requirements.txt
 # command to run tests
