@@ -1,1 +1,6 @@
 redispartition
+## testing
+hypothesis
+pytest
+codecov
+pytest-cov
