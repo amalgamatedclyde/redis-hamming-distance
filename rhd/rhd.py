@@ -57,7 +57,10 @@ class Rhd(RedisCluster):
         super().__init__(connections)
 
     def _index_to_mask_index(self, c):
-        return "".join([str(c), "_mask"])
+        if isinstance(c, list):
+            return ["".join([str(i), "_mask"]) for i in c]
+        else:
+            return "".join([str(c), "_mask"])
 
     def set_mask(self, c, _bytes):
         c = self._index_to_mask_index(c)

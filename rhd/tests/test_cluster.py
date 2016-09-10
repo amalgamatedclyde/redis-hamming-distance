@@ -64,7 +64,7 @@ def test_setbit_getbit_int(c, i, bit):
     assert rhd.getbit(c, i) == bit
 
 
-@given(c=st.lists(text(min_size=1), unique=True, max_size=5, min_size=5), i=st.lists(integers(min_value=0, max_value=100000), max_size=5, min_size=5), bits=st.lists(binary(min_size=1), max_size=5, min_size=5))
+@given(c=st.lists(text(min_size=1), unique=True, max_size=5, min_size=5), i=st.lists(integers(min_value=0, max_value=100000), max_size=5, min_size=5), bits=st.lists(integers(min_value=0, max_value=1), max_size=5, min_size=5))
 def test_setbit_getbit_pipe(c, i, bits):
     rhd = RedisCluster(connections)
     rhd.setbit(c, i, bits)
