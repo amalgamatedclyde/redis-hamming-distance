@@ -1,6 +1,1 @@
-pytest
-redis
-hypothesis
-crc16
-codecov
-pytest-cov
+redispartition
