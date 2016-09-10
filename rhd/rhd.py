@@ -13,25 +13,32 @@ class Rhd(object):
         self.get_connection(c).set(c, _bytes)
 
     def setbit(self, c, i, bit):
-        pass
+        self.get_connection(c).setbit(c, i, bit)
 
-    def set_mask(self, c, bytes):
-        pass
+    def set_mask(self, c, _bytes):
+        c = self._index_to_mask_index(c)
+        self.set(c, _bytes)
 
-    def set_bit_mask(self, c):
-        pass
+    def setbit_mask(self, c, i, bit):
+        c = self._index_to_mask_index(c)
+        self.setbit(c, i, bit)
 
     def get(self, c):
         return self.get_connection(c).get(c)
 
-    def getbit(self, c):
-        pass
+    def getbit(self, c, i):
+        return self.get_connection(c).getbit(c, i)
 
     def get_mask(self, c):
-        pass
+        c = self._index_to_mask_index(c)
+        return self.get(c)
 
-    def getbit_mask(self, c):
-        pass
+    def getbit_mask(self, c, i):
+        c = self._index_to_mask_index(c)
+        return self.getbit(c, i)
+
+    def _index_to_mask_index(self, c):
+        return "".join([str(c), "_mask"])
 
     def get_connection(self, c):
         if isinstance(c, str):
