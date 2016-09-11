@@ -84,3 +84,25 @@ def test_hamming_dist_with_masking(k1, k2, bitstring1, bitstring2, mask1, mask2)
             (bit1 ^ bit2) & bit2_mask & bit1_mask).count(True)
     else:
         assert rhd.hamming_dist(k1, k2) == 0
+
+
+def setter(rhd, k, bitstring):
+    rhd.setbit([k]*10, [i for i in range(10)],
+               [int(i) for i in list(bitstring)])
+# Distmatrix
+
+
+@given(k1=st_key, k2=st_key, k3=st_key, bitstring1=st_bitstring, bitstring2=st_bitstring, bitstring3=st_bitstring)
+def test_dist_matrix(k1, k2, k3, bitstring1, bitstring2, bitstring3):
+    rhd = Rhd(connections)
+    rhd.flushall()
+    setter(rhd, k1, bitstring1)
+    setter(rhd, k2, bitstring2)
+    setter(rhd, k3, bitstring3)
+    dist_matrix = rhd.distance_matrix(k1, k2, k3)
+    assert dist_matrix[0][0] == 0
+    assert dist_matrix[1][1] == 0
+    assert dist_matrix[2][2] == 0
+    assert dist_matrix[0][1] == rhd.hamming_dist(k1, k2)
+    assert dist_matrix[1][0] == rhd.hamming_dist(k1, k2)
+    assert dist_matrix[0][2] == rhd.hamming_dist(k1, k3)

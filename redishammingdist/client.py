@@ -1,6 +1,7 @@
 from __future__ import print_function
 from redispartition import RedisCluster
 from redispartition.decorators import pipeiflist
+import itertools
 
 
 class Rhd(RedisCluster):
@@ -52,3 +53,11 @@ class Rhd(RedisCluster):
         masked_xor_key = self.masked_xor(k1, k2)
         hdist = self.bitcount(masked_xor_key)
         return hdist
+
+    def distance_matrix(self, *args):
+        matrix = [[0 for _ in range(len(args))] for _ in range(len(args))]
+        for i, j in itertools.combinations([x for x in range(len(args))], 2):
+            dist = self.hamming_dist(args[i], args[j])
+            matrix[i][j] = dist
+            matrix[j][i] = dist
+        return matrix
