@@ -4,3 +4,4 @@ hypothesis
 pytest
 codecov
 pytest-cov
+bitstring
