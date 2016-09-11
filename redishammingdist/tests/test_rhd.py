@@ -42,15 +42,18 @@ def test_set_get_mask(k, _bytes):
 st_bitstring = text(min_size=10, max_size=10, alphabet=['1', '0'])
 
 
+def setter(rhd, k, bitstring):
+    rhd.setbit([k]*10, [i for i in range(10)],
+               [int(i) for i in list(bitstring)])
+
+
 @given(k1=st_key, k2=st_key, bitstring1=st_bitstring, bitstring2=st_bitstring)
 def test_hamming_dist(k1, k2, bitstring1, bitstring2):
     rhd = Rhd(connections)
     rhd.flushall()
 
-    rhd.setbit([k1]*10, [i for i in range(10)],
-               [int(i) for i in list(bitstring1)])
-    rhd.setbit([k2]*10, [i for i in range(10)],
-               [int(i) for i in list(bitstring2)])
+    setter(rhd, k1, bitstring1)
+    setter(rhd, k2, bitstring2)
     assert all(rhd.getbit_mask([k1]*10, [i for i in range(10)]))
     bit1 = Bits(bin=bitstring1)
     bit2 = Bits(bin=bitstring2)
@@ -64,11 +67,8 @@ def test_hamming_dist(k1, k2, bitstring1, bitstring2):
 def test_hamming_dist_with_masking(k1, k2, bitstring1, bitstring2, mask1, mask2):
     rhd = Rhd(connections)
     rhd.flushall()
-
-    rhd.setbit([k1]*10, [i for i in range(10)],
-               [int(i) for i in list(bitstring1)])
-    rhd.setbit([k2]*10, [i for i in range(10)],
-               [int(i) for i in list(bitstring2)])
+    setter(rhd, k1, bitstring1)
+    setter(rhd, k2, bitstring2)
 
     rhd.setbit_mask([k1]*10, [i for i in range(10)],
                     [int(i) for i in list(mask1)])
@@ -86,12 +86,6 @@ def test_hamming_dist_with_masking(k1, k2, bitstring1, bitstring2, mask1, mask2)
         assert rhd.hamming_dist(k1, k2) == 0
 
 
-def setter(rhd, k, bitstring):
-    rhd.setbit([k]*10, [i for i in range(10)],
-               [int(i) for i in list(bitstring)])
-# Distmatrix
-
-
 @given(k1=st_key, k2=st_key, k3=st_key, bitstring1=st_bitstring, bitstring2=st_bitstring, bitstring3=st_bitstring)
 def test_dist_matrix(k1, k2, k3, bitstring1, bitstring2, bitstring3):
     rhd = Rhd(connections)
@@ -106,3 +100,4 @@ def test_dist_matrix(k1, k2, k3, bitstring1, bitstring2, bitstring3):
     assert dist_matrix[0][1] == rhd.hamming_dist(k1, k2)
     assert dist_matrix[1][0] == rhd.hamming_dist(k1, k2)
     assert dist_matrix[0][2] == rhd.hamming_dist(k1, k3)
+    assert dist_matrix[1][2] == rhd.hamming_dist(k2, k3)
