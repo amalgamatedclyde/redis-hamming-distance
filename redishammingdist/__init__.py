@@ -1,1 +1,1 @@
-#from rhd import Rhd
+from redishammingdist.client import Rhd

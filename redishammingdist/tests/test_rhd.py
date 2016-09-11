@@ -1,4 +1,4 @@
-from redishammingdist.rhd import Rhd
+from redishammingdist import Rhd
 import redis
 from bitstring import Bits
 from hypothesis import given
